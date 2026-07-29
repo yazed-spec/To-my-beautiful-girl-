@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>التحقق من الهوية</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Tahoma,Arial,sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#0b1220,#1f2b46);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    overflow:hidden;
+    color:#fff;
+}
+
+/* شاشة التحميل */
+
+#loader{
+    position:fixed;
+    inset:0;
+    background:#0b1220;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    z-index:100;
+    transition:opacity .6s ease;
+}
+
+.spinner{
+    width:70px;
+    height:70px;
+    border:6px solid rgba(255,255,255,.15);
+    border-top:6px solid #4da3ff;
+    border-radius:50%;
+    animation:spin 1s linear infinite;
+    margin-bottom:20px;
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+/* البطاقة */
+
+.card{
+    width:92%;
+    max-width:420px;
+    padding:30px;
+    border-radius:20px;
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(18px);
+    box-shadow:0 20px 50px rgba(0,0,0,.4);
+    display:none;
+    opacity:0;
+    transform:scale(.92);
+    transition:.5s ease;
+}
+
+.card.show{
+    display:block;
+    opacity:1;
+    transform:scale(1);
+}
+
+h2{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+label{
+    display:block;
+    margin:15px 0 8px;
+}
+
+input{
+    width:100%;
+    padding:13px;
+    border:none;
+    border-radius:12px;
+    background:#1f2937;
+    color:#fff;
+    font-size:15px;
+    outline:none;
+    transition:.25s;
+}
+
+input:focus{
+    background:#273447;
+}
+
+button{
+    width:100%;
+    margin-top:22px;
+    padding:13px;
+    border:none;
+    border-radius:12px;
+    background:#2563eb;
+    color:#fff;
+    font-size:16px;
+    cursor:pointer;
+    transition:.25s;
+}
+
+button:hover{
+    background:#1d4ed8;
+}
+
+button:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+}
+
+#error{
+    color:#ff8c8c;
+    text-align:center;
+    margin-top:15px;
+    min-height:20px;
+}
+
+.success{
+    text-align:center;
+    animation:fadeIn .8s ease;
+}
+
+.success h2{
+    color:#4ade80;
+    margin-bottom:18px;
+}
+
+@keyframes fadeIn{
+
+    from{
+        opacity:0;
+        transform:translateY(15px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+</style>
+
+</head>
+
+<body>
+
+<div id="loader">
+    <div class="spinner"></div>
+    <p>جاري التحميل...</p>
+</div>
+
+<div class="card" id="card">
+
+    <h2> ممكن الاجابات ي بنوتي </h2>
+
+    <label>انتي اي في حياتي؟</label>
+    <input id="q1">
+
+    <label>كم عمرك؟</label>
+    <input id="q2">
+
+    <label>إيه التاريخ المميز بينا؟</label>
+    <input id="q3">
+
+    <button id="btn" onclick="check()">تحقق</button>
+
+    <div id="error"></div>
+
+</div>
+
+<script>
+
+const loader=document.getElementById("loader");
+const card=document.getElementById("card");
+const error=document.getElementById("error");
+const btn=document.getElementById("btn");
+
+setTimeout(()=>{
+
+    loader.style.opacity="0";
+
+    setTimeout(()=>{
+
+        loader.style.display="none";
+        card.classList.add("show");
+
+    },600);
+
+},2000);
+
+function check(){
+
+    let a=document.getElementById("q1").value.trim().toLowerCase();
+    let b=document.getElementById("q2").value.trim();
+    let c=document.getElementById("q3").value.trim().toLowerCase();
+
+    if(a==="بنوتي" && b==="15" && c==="22/1"){
+
+        error.textContent="";
+
+        btn.disabled=true;
+
+        card.style.opacity="0";
+        card.style.transform="scale(.95)";
+
+        setTimeout(()=>{
+
+            card.innerHTML=`
+                <div class="success">
+                    <h2>✅ تم التحقق</h2>
+
+                    <div style="line-height:2;font-size:18px;">
+                     السلام عليكم 
+عامله اي  ي روما
+اتمني تكوني بخير ان شاء  الله
+الف سلامه عليكي ان شاء الله تكوني كويسه وم ف اي حاجه 
+م عارف حاسس كل حاجه بقت تقيله جدا حاجات كتيير جدا م بقيت عارف ازاي اقدر اغير كل اللي انا فيه ب انا بحاول والله العظيم حتي كنتي انتي الوحيده اللي تسمعيني والانسانه اللي قدرت احكي واشكي ليها همي انا اسف بجد اني م قدرت اعمل اللي اتفقنا عليه واني رجعت لوحدي تاني ب صدقيني حاولت اني اكون حتي اصدقاء م عرفت بقيت حاسس بوحده صعبه وغريبه جدا انا اسف جداً واكيد عارفه اني م قصدي اي حاجه ولا حتي كان قصدي ائذيكي انا كنت بحاول ابق جمبك بحاول ابق سند ليكي ف اي وقت اكون موجود جمبك حاولت ان اخلي شخص يحبني زي م انا بحبه انتي الحاجه الوحيده اللي بتفرحني جدا والحاجه ااوحيده بردوا اللي عمري م قدرت ازعل منها أبداً تعرفي ان انا ببقي مبسوط وانا شايفك ناجحه ومبسوطه ف اتمني تكوني مبسوطه دايما واتمني تكوني مصدقاني ف اني فعلاً م عايز غيرك وم بحب غيرك والله 
+ربنا معاكي ويوفقك وينور طريقك وان شاء الله تكوني م نصيبي بتمني ليكي الخير دايما عمري م نسيتك ف اي رقعه رقعتها روحي معاكي دايما م عايزك تزعلي أبداً م اي حاجه م عايزك تعيطي كتير انتي اقوي م كدا م بطلب م نعيط انا طلبي م يبقي كتير ع م نتعب اكتر والله انتي جميله جداً واجمل حاجه ف حياتي وهتفضلي طلبي الوحيد م ربنا دايما حتي وانتي معايا هفضل اطلبك م ربنا ربي يحفظك 
+وأنا بقيت انزل اتمشي م نفسي شويه كل يوم بعد صلاه الفجر بعيدا ع الناس لان م قادر ارتاح وسطهم م عارف اه وكمان بقيت خايف م بكرا م تكوني معي وخايف م اني م قادر اتقبل نفسي خالص بقيت اكرهني كرهت نفسي بجد ب بقيت بدعي اني اهدي وارتاح م التفكير شويه والحمد لله كان تقريباً م 3 ايام او ع حسب م تكوني تقرأي الماسدج دي دوقتي عيد ميلادي كنت منتظر ماسدج منك م اول اليوم ب اكيد كان عندك حجات اهم ويمكن تكوني مشغوله ب حرفيا ولا اي حد ولا حتي اهلي كانوا فاكرين عمتا وم عارف لي م رديتي عليا ف اللايف لما دخلت وعملت لي unfollow انا عملت حاجه زعلتك مني او دايقتك مني عمتا انا اسف لو دايقتك ف اي حاجه حقك عليا واتمني تعرفيني انا دايقتك ف اي 
+م فتره يمكن قصيره دخل لي ولد اسمه عبدالله اتكلمت معه شويه وقال لي انه كان يعرفك قبل م احنا نتكلم وهوا طلب مني اوصل ليكي الرساله دي ( قول لروما بطلي تدعي علي عبدالله بس كدا ) ( وزود علي الرساله وقولها تسامحني انا مش حمل اقف قدام حد آذيتوا في يوم من الايام )  اتمني تسامحيه ع خاطري انا هوا اتغير وانا هحاول افضل معاه لحد م اخليه يتغير للاحسن حقك عليا انا م كل اللي حصل تجاهه اي كان صديقني انتي اجمل م انك تزعلي ع اي شئ شخص وراح ربنا يهديه واه نسيت اقول ان بعد تفكير طويل قررت ان يوم عيد ميلادي هقفل كل اكونتاتي ب رجعت ف كلامي لحد م اوصل ليكي الماسدج دي يمكن ببعت وبقفل كل شئ موجود معك اكيد رقم الفون تاعي موجود واتس لو احتاجتي مني اي شئ انا موجود وف اي وقت ان شاء الله 
+ولو وصلتي لحد هنا ف الماسدج دي بحب اقول م كل قلبي انا فعلاً بحبك 
+وكمان وحشتيني جداً 
+ف رعاية وحفظ الله ي روما 
+We will meet soon, God willing. 
+                    </div>
+
+                </div>
+            `;
+
+            card.style.opacity="1";
+            card.style.transform="scale(1)";
+
+        },500);
+
+    }
+
+    else{
+
+        error.textContent="❌ إحدى الإجابات غير صحيحة، حاول مرة أخرى.";
+
+    }
+
+}
+
+/* الضغط على Enter */
+
+document.addEventListener("keydown",function(e){
+
+    if(e.key==="Enter"){
+
+        check();
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>
